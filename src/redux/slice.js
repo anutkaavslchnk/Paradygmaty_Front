@@ -31,11 +31,15 @@ state.isLoading=false;
           })
           .addCase(addToDo.fulfilled,(state,action)=>{
             state.items.push(action.payload);
-            toast.success('The task is deleted!');
+            toast.success('The task is added!');
           })
           .addCase(addToDo.rejected,(state,action)=>{
             state.isError = true;
-            toast.error('Sorry, something went wrong, try again!');
+            if (typeof action.payload === 'string') {
+              toast.error(action.payload);
+            } else {
+              toast.error('Sorry, something went wrong, try again!');
+            }
           })
 
 

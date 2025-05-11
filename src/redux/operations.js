@@ -19,14 +19,17 @@ export const fetchToDos = createAsyncThunk('fetchToDos', async (_, thunkAPI) => 
       return thunkAPI.rejectWithValue(error.message);
     }
   });
-  
   export const addToDo = createAsyncThunk('addToDo', async (body, thunkAPI) => {
     try {
       const { data } = await api.post('api/todos', body);
-  
-  
-      return data; 
+      return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      if (error.response && error.response.data && error.response.data.message) {
+        
+        return thunkAPI.rejectWithValue(error.response.data.message);
+      }
+      
+      return thunkAPI.rejectWithValue(error.message || 'Something went wrong');
     }
   });
+  

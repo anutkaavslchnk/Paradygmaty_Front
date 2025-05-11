@@ -3,7 +3,9 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToDo, deleteToDo, fetchToDos } from "../../redux/operations";
 import { selectToDo } from "../../redux/selectors";
-
+import { Toaster } from "react-hot-toast";
+import s from './ToDo.module.css';
+import deleteImg from '/public/Vector.png';
 const ToDo = () => {
  const dispatch=useDispatch();
     const initialValues={
@@ -20,25 +22,33 @@ dispatch(addToDo(values));
     }
 
   return (
-  <>
-  <h1>To do App</h1>
+    <>
+    <Toaster position="top-right" />
+  <div className={s.container}>
+ 
+  <h1 className={s.title}>To do App</h1>
   <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-    <Form>
-        <Field type='text' name="todo"></Field>
-        <button type="submit">Add</button>
+    <Form className={s.form}>
+        <Field className={s.input} type='text' name="todo" placeholder="Add the task"></Field>
+        <button className={s.button} type="submit">Add</button>
     </Form>
   </Formik>
 
-  <ul>
+  <ul className={s.list}>
     {todos!=0 && todos.map(item=>{
       return (
         <div>
-      <li key={item._id}>{item.todo}</li>
-<button type="button" onClick={()=>dispatch(deleteToDo(item._id))}>Delete</button>
+      <li key={item._id} className={s.item}>
+        <p>{item.todo}</p>
+
+      <button type="button" className={s.delete} onClick={()=>dispatch(deleteToDo(item._id))}><img src={deleteImg} ></img></button>
+      </li>
+
 </div>
       )
     })}
   </ul>
+  </div>
   </>
 )
 };
