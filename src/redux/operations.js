@@ -33,3 +33,17 @@ export const fetchToDos = createAsyncThunk('fetchToDos', async (_, thunkAPI) => 
     }
   });
   
+
+  export const editToDo=createAsyncThunk('editToDo',async (todoId, thunkAPI) => {
+        try {
+      const { data } = await api.patch(`api/todos/${todoId}`);
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        
+        return thunkAPI.rejectWithValue(error.response.data.message);
+      }
+      
+      return thunkAPI.rejectWithValue(error.message || 'Something went wrong');
+    }
+  })
