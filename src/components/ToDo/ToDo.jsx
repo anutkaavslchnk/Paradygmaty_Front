@@ -1,18 +1,23 @@
 import { Field, Form, Formik } from "formik";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addToDo, deleteToDo, fetchToDos } from "../../redux/operations";
+import { addToDo, deleteToDo, editToDo, fetchToDos } from "../../redux/operations";
 import { selectToDo } from "../../redux/selectors";
 import { Toaster } from "react-hot-toast";
 import s from './ToDo.module.css';
 import deleteImg from '/public/Vector.png';
 const ToDo = () => {
+  const [open,setOpen]=useState(null);
+
+
  const dispatch=useDispatch();
     const initialValues={
         todo:''
     }
-
-const todos=useSelector(selectToDo);
+  const handleClickEdit=(id)=>{
+    setOpen(id);
+  }
+const todos=useSelector(selectToDo)|| [];
 useEffect(() => {
   dispatch(fetchToDos()); 
 }, [dispatch]);
@@ -37,12 +42,27 @@ dispatch(addToDo(values));
   <ul className={s.list}>
     {todos!=0 && todos.map(item=>{
       return (
-        <div>
-      <li key={item._id} className={s.item}>
+        <div key={item._id}>
+      <li className={s.item}>
         <p>{item.todo}</p>
 
       <button type="button" className={s.delete} onClick={()=>dispatch(deleteToDo(item._id))}><img src={deleteImg} ></img></button>
+      <button type='button' onClick={() => handleClickEdit(item._id)}>Edit</button>
+
+
       </li>
+      {open === item._id &&  (
+        <div>
+ <Formik initialValues={{ todo: item.todo || '' } } onSubmit={(values, options) => {
+options.resetForm(); 
+dispatch(editToDo({todoId:item._id, updatedData:{todo:values.todo}}));
+ }}>
+    <Form className={s.form}>
+        <Field className={s.input} type='text' name="todo" placeholder="Change the task"></Field>
+        <button className={s.button} type="submit">Change</button>
+    </Form>
+  </Formik>
+      </div>)}
 
 </div>
       )

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { addToDo, deleteToDo, fetchToDos } from "./operations"
+import { addToDo, deleteToDo, editToDo, fetchToDos } from "./operations"
 import toast from "react-hot-toast"
 
 const initialState={
@@ -40,6 +40,14 @@ state.isLoading=false;
             } else {
               toast.error('Sorry, something went wrong, try again!');
             }
+          })
+          .addCase(editToDo.fulfilled,(state,action)=>{
+     const updatedTodo = action.payload.data;
+
+
+    state.items = state.items.map(todo =>
+        todo._id === updatedTodo._id ? updatedTodo : todo
+    );
           })
 
 
