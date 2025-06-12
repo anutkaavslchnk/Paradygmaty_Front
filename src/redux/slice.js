@@ -49,6 +49,14 @@ state.isLoading=false;
         todo._id === updatedTodo._id ? updatedTodo : todo
     );
           })
+            .addCase(editToDo.rejected,(state,action)=>{
+            state.isError = true;
+            if (typeof action.payload === 'string') {
+              toast.error(action.payload);
+            } else {
+              toast.error('Sorry, something went wrong, try again!');
+            }
+          })
 
 
 
