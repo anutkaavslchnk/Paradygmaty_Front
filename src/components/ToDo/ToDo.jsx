@@ -1,8 +1,8 @@
 import { Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addToDo, deleteToDo, editToDo, fetchToDos } from "../../redux/operations";
-import { selectToDo } from "../../redux/selectors";
+import { addToDo, deleteToDo, editToDo, fetchToDos } from "../../redux/operations.js";
+import { selectToDo } from "../../redux/selectors.js";
 import { Toaster } from "react-hot-toast";
 import s from './ToDo.module.css';
 import deleteImg from '/public/Vector.png';
