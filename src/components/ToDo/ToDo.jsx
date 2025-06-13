@@ -9,6 +9,7 @@ import deleteImg from '/public/Vector.png';
 import edit from '/public/edit.png';
 import close from '/public/close.png';
 import { useNavigate } from "react-router-dom";
+import calendar from '/public/calendar.png';
 const ToDo = () => {
   const [open, setOpen] = useState(null); // which todo is being edited
   const dispatch = useDispatch();
@@ -40,43 +41,45 @@ nav('/calendar');
     <>
       <Toaster position="top-right" />
       <div className={s.container}>
-        <button onClick={handleCalendar}>Calendar with tasks</button>
-        <h1 className={s.title}>To do App</h1>
+        
+              <button  className={s.calendar_btn}onClick={handleCalendar}><img src={calendar}  alt="calendar_icon"/> </button>
+    <p className={s.txt_cal}>Calendar</p>
+        <h1 className={s.title}>Plan your days</h1>
 
-        {/* Add new todo form */}
+
         <Formik initialValues={initialValues} onSubmit={handleSubmit}>
           <Form className={s.form}>
             <Field className={s.input} type='text' name="todo" placeholder="Add the task" />
-            <Field className={s.input} type="date" name="deadline" />
+            <Field className={s.input} type="date" name="deadline"  min={new Date().toISOString().split("T")[0]}/>
             <button className={s.button} type="submit">Add</button>
           </Form>
         </Formik>
 
-        {/* List of todos */}
+   
         <ul className={s.list}>
           {todos.length > 0 && todos.map(item => (
             <li key={item._id} className={s.item}>
-              {/* If this item is being edited */}
+            
               {open === item._id ? (
                 <Formik
                   initialValues={{ todo: item.todo || '' }}
                   onSubmit={(values, options) => {
                     options.resetForm();
                     dispatch(editToDo({ todoId: item._id, updatedData: { todo: values.todo } }));
-                    setOpen(null); // close edit mode
+                    setOpen(null); 
                   }}
                 >
                   <Form className={s.inlineForm}>
                     <Field
-                      className={s.input}
+                      className={s.input_change}
                       type="text"
                       name="todo"
                       placeholder="Change the task"
                     />
-                    <button className={s.button} type="submit">Change</button>
+                    <button className={s.button_ch} type="submit">Change</button>
                     <button
                       type="button"
-                      className={s.delete}
+                      className={s.close}
                       onClick={() => setOpen(null)} 
                     >
                      <img src={close} alt="delete" />
